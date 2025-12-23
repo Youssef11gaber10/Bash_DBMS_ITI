@@ -3,7 +3,7 @@
 # prompt for table name and number of columns
 # loop to get column names and data types
 # save the table structure in a file
-# create a file with table name in the current db directory
+# create dir inside db dir with the name of table and create 2files one for data and another for metadata  
 
 function create_table()
 {
@@ -25,8 +25,8 @@ function create_table()
             continue
         fi
 
-        # validate table name its not exist before
-        if [ -f "${DB_Dir}/$Curr_DB/$table_name" ]
+        # validate table name its no directory exist before in the current db
+        if [ -d "${DB_Dir}/$Curr_DB/$table_name" ]
             then
             echo -e "${RED}Table already exists.${RESET}"
             sleep 2 ; # replace erase output hold out for while then show the menu again
@@ -108,47 +108,37 @@ function create_table()
     done
 
     pk=""
-    #ask if he want to add primary key and ask if yes which column name
+    #the users must enter name of column that he want to set as primary key
     while true
-    do
-        echo -e "${YELLOW}${UNDERLINE}${BOLD}Do you want to set a primary key for this table? (y/n):${RESET}"
-        read pk_choice
-        if [[ "$pk_choice" == "y" || "$pk_choice" == "Y" ]]
+      do
+        echo -e "${YELLOW}${UNDERLINE}${BOLD}Enter the column name to set as primary key: ${RED}${UNDERLINE}${BOLD}(-1<---)${RESET}"
+        read pk_column
+        if [ $pk_column -eq  -1 ]&>/dev/null #this create error don't show not neccessary
             then
-            while true
-            do
-                echo -e "${YELLOW}${UNDERLINE}${BOLD}Enter the column name to set as primary key: ${RED}${UNDERLINE}${BOLD}(-1<---)${RESET}"
-                read pk_column
-                if [ $pk_column -eq  -1 ]&>/dev/null #this create error don't show not neccessary
-                    then
-                    return  # back to connect menu
-                fi  
-                #check if the column name exists in the table
-                if [[ $columns == *":$pk_column:"* ]]
-                    then
-                    pk+="$pk_column"
-                    break 2; # exit both loops 
-                else
-                    echo -e "${RED}Column does not exist in this table. Please enter a valid column name.${RESET}"
-                    sleep 2 ; 
-                fi
-            done
-        elif [[ "$pk_choice" == "n" || "$pk_choice" == "N" ]]
+            return  # back to connect menu
+        fi  
+        #check if the column name exists in the table
+        if [[ $columns == *":$pk_column:"* ]]
             then
-            break # exit the pk setting loop
+            pk+="$pk_column"
+            break 2; # exit both loops 
         else
-            echo -e "${RED}Invalid choice. Please enter 'y' or 'n'.${RESET}"
+            echo -e "${RED}Column does not exist in this table. Please enter a valid column name.${RESET}"
             sleep 2 ; 
         fi
     done
 
-    #save the table structure in a file
-    
-    echo "${columns:1}" > "${DB_Dir}/$Curr_DB/$table_name"
-    echo $num_columns >> "${DB_Dir}/$Curr_DB/$table_name"  # number of columns
+    #make directory with the table name and make 2 files inside it one for data and another for metadata
+    mkdir -p "${DB_Dir}/$Curr_DB/$table_name"
+    touch "${DB_Dir}/$Curr_DB/$table_name/data"
+    touch "${DB_Dir}/$Curr_DB/$table_name/metadata"
+    #save the table structure in the metadata file
+
+    echo "${columns:1}" > "${DB_Dir}/$Curr_DB/$table_name/metadata"  # column definitions
+    echo $num_columns >> "${DB_Dir}/$Curr_DB/$table_name/metadata"  # number of columns
     if [[ -n "$pk" ]]; 
         then
-        echo "pk:$pk" >> "${DB_Dir}/$Curr_DB/$table_name"  # primary key
+        echo "pk:$pk" >> "${DB_Dir}/$Curr_DB/$table_name/metadata"  # primary key
     fi
 
     echo -e "${GREEN}Table '$table_name' created successfully in database '$Curr_DB'.${RESET}"
