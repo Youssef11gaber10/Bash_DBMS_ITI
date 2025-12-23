@@ -10,35 +10,51 @@
 function drop_db()
 {
     list_databases
-    while true # keep asking until gives you -1 to go back to menu
-    do
-        echo -e "${YELLOW}${UNDERLINE}${BOLD}Enter the name of the database to drop:  ${RED}${UNDERLINE}${BOLD}(-1<---)${RESET}"
-        read db_name    
 
-        if [ $db_name -eq  -1 ]&>/dev/null #this create error don't show not neccessary
-            then
-            # erase_output 2 # erase 2 lines
-            return # back to menu
-        fi  
+    while true;do
+        echo -e "${BOLD}${YELLOW}${UNDERLINE}Enter the name of the database you want to delete ${RED}(or -1 to cancel)${RESET}: "
+        read   dbname
 
-        if [ -d "${DB_Dir}/$db_name" ]
-            then
-            if read -p "Are you sure you want to drop the database '$db_name'? This action cannot be undone. (y/n): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]
-                then
-                rm -rf "$DB_Dir/$db_name"
-                echo -e "${GREEN}Database dropped successfully.${RESET}"
-                sleep 2 ; # replace erase output hold out for while then show the menu again
-                # erase_output 3 # erase 2 lines of read output and the success message
-                list_databases # show updated list
-            else
-                echo -e "${RED}Drop database operation cancelled.${RESET}"
-                sleep 2 ; 
-            fi
-
-        else
-            echo -e "${RED}Database does not exist.${RESET}"
-            sleep 2 ; # replace erase output hold out for while then show the menu again
-            # erase_output 3 # erase 2 lines
+        if [[ -z "$dbname" ]];then
+            echo -e "${BOLD}${YELLOW}Database name can not be empty! ${RESET}"
+            sleep 2
+            continue
         fi
+
+        if [[ "$dbname" == -1 ]];then
+            return 
+        elif [[ ! -d "${DB_Dir}/${dbname}" ]];then
+            echo -e "${BOLD}${YELLOW}Database name can not be found! ${RESET}"
+            sleep 2
+            continue
+        fi 
+
+    
+        read -p "Are you sure you want to delete the database '$dbname'? (y/n) (or -1 to cancel): " option
+        case "$option" in
+            y|Y) 
+                rm -r "${DB_Dir}/${dbname}"
+                if [[ $? -eq 0 ]];then
+                    echo -e "${GREEN}Database '$dbname' deleted successfully ${RESET}"
+                    sleep 2
+                    break
+                else 
+                    echo -e "${RED}something went wrong${RESET}"
+                    sleep 2
+                    continue
+                fi
+                ;;
+            n|N) 
+                echo -e "${YELLOW}Deletion cancelled. ${RESET}"
+                sleep 2
+                return 1
+                ;;
+            -1)
+                return ;;
+            *)
+                echo -e "${YELLOW}Invalid Option ${RESET}"
+                sleep 2
+                ;;
+        esac
     done
 }

@@ -4,56 +4,44 @@
 
 function create_db()
 {
-# want to keep user untill the db_name being valid
-while true
-do
-    echo -e "${YELLOW}${UNDERLINE}${BOLD}Enter the name of the new database: ${RED}${UNDERLINE}${BOLD}(-1<---)${RESET}"
-    read   db_name
+    while true; do
+        echo -e "${BOLD}${YELLOW}${UNDERLINE}Enter the name of the Database: ${RED}(-1 to cancel)${RESET}"
+        read dbname
 
-    if [ $db_name -eq  -1 ]&>/dev/null #this create error don't show not neccessary
-        then
-        # erase_output 3 # erase 2 lines
-        return # back to menu
-    fi
+        if [[ -z $dbname ]];then
+            echo -e "${BOLD}${YELLOW}Database name can not be empty!${RESET}"
+            sleep 2
+            continue
+        fi
 
-    #check if the database name is valid (not empty and no special characters)
-    if [[ -z "$db_name" || ! "$db_name" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
-        echo -e "${RED}Invalid database name. Use only letters, numbers, and underscore ,MUST not start with number .${RESET}"
-        sleep 2 ; # replace erase output hold out for while then show the menu again
-        # erase_output 4 # erase 3 lines
-        continue
-    fi
+        if [[ ! $dbname =~ ^[a-zA-Z0-9_-]+$ ]];then
+            echo -e "${BOLD}${YELLOW}Invalid database name ! Use only letters, numbers, underscores or dashes${RESET}"
+            sleep 2
+            continue
+        fi
 
-    # validate database name its not exist before
-    if [ -d "${DB_Dir}/$db_name" ]
-        then
-        echo -e "${RED}Database already exists.${RESET}"
-        sleep 2 ; # replace erase output hold out for while then show the menu again
-        # erase_output 3 # erase the 1 lines
-        continue
-    fi
-    #if he reach this point so the db name is valid
-    break
-done
+        if [[ -d "${DB_Dir}/$dbname"  ]];then
+            echo -e "${BOLD}${YELLOW}Database '$dbname' already exists!${RESET}"
+            sleep 2
+            continue
+        fi
 
-#  if the dbname is valid and not exist so create the folder 
-mkdir -p "$DB_Dir/$db_name"
-echo -e "${GREEN} Database created successfully${RESET}"
-sleep 2 ; # replace erase output hold out for while then show the menu again
-# erase_output 4 # erase  2 line of read output and the success message
+        if [[ "$dbname" == -1 ]];then
+            return 1
+        fi
 
-}
-
-
-
-function erase_output()
-{
-    msg_lines=$1
-        sleep 3
-    # Move cursor up and clear lines
-    for ((i=0; i<msg_lines; i++)); 
-    do
-        tput cuu1   # move cursor up one line
-        tput el     # clear line
+        mkdir -p "${DB_Dir}/$dbname"
+        
+        if [[ $? -eq 0 ]];then
+            echo -e "${BOLD}${GREEN}Database '$dbname' created succesfully at ${DB_Dir}/${dbname}${RESET}"
+            sleep 2
+            break
+        else 
+            echo -e "${BOLD}${YELLOW}Failed to create the database '$dbname' ${RESET}"
+            sleep 2
+            break
+        fi
     done
+
 }
+

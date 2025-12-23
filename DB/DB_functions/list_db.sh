@@ -5,15 +5,21 @@
 
 function list_databases() 
 {
-if [ -z "$(ls $DB_Dir)" ] # if the ls return empty string 
-        then
-        echo -e "${RED}No databases found.${RESET}"
-else
-        echo -e "${UNDERLINE}${BOLD}${YELLOW}Available Databases:${RESET}"
-        echo -e  "${BOLD}$(ls -1 "$DB_Dir" )${RESET}"
-        sleep 2;
+    if [[ -z "$DB_Dir" || -z $(ls -A "$DB_Dir") ]];then
+        echo -e "${YELLOW}You dont have any databases in your system${RESET}"
+        sleep 2
+        return 1;
+    fi
 
-fi
+    echo -e "${BOLD}Available Databases:${RESET}"
+    for db in "$DB_Dir"/*/;do
+        echo -e "- ${GREEN}$(basename "$db")${RESET}"
+    done
+
+    if [[ $? -eq 0 ]];then
+        echo -e "${GREEN}Databases listed successfully${RESET}"
+        sleep 2
+    fi
 
 }
 
