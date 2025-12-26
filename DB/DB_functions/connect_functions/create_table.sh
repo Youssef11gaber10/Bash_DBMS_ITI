@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-# create a new table in the connected database
-# prompt for table name and number of columns
-# loop to get column names and data types
-# save the table structure in a file
-# create dir inside db dir with the name of table and create 2files one for data and another for metadata  
 
 function create_table()
  {
@@ -78,6 +73,7 @@ function create_table()
                     ;;
                 *) 
                     echo -e "${RED}Enter a valid choice${RESET}"
+                    
                     sleep 2
                     ;;
             esac
