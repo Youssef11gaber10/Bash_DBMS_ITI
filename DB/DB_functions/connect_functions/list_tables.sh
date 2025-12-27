@@ -19,6 +19,7 @@ function list_tables()
         # list tables
         echo -e "${GREEN}${BOLD}"$Curr_DB" Tables : ${RESET}"
         ls "$DB_Dir/$Curr_DB"
+        sleep 2
     else
         echo -e "${RED}"$Curr_DB" Datase doesn't have tables yet${RESET}"
         return 1
