@@ -62,11 +62,6 @@ function select_with_option()
     echo -e "\n${BOLD}${UNDERLINE}${YELLOW}$(IFS=$'\t'; echo "${selected_columns[*]}")${RESET}"
 
   
-  
-    # echo $where_col_name # have the name of the columns
-    # echo $where_col_num # have num for this columns wants to filter on 
-    # echo $where_value # have the value for the column to filter on
-
    awk -F'<\\|>' -v col_num="$where_col_num" -v val="$where_value" -v cols="${selected_nums[*]}" '
     BEGIN {
         split(cols, col, " ")
