@@ -28,7 +28,7 @@ function delete_all_data(){
     echo -e "${YELLOW}Are you sure you want to delete all data from table $table ${RED}( y / n ) ${RESET}"
     read -p "answer : " answer
 
-    if [[ "$answer" = "n" ||  "$answer" != "N" ]];then
+    if [[ "$answer" = "n" ||  "$answer" = "N" ]];then
         echo "no deletes"
         return
     else 
