@@ -15,7 +15,7 @@ function create_db()
         fi
 
         if [[ ! $dbname =~ ^[a-zA-Z0-9_-]+$ ]];then
-            echo -e "${BOLD}${YELLOW}Invalid database name ! Use only letters, numbers, underscores or dashes${RESET}"
+            echo -e "${BOLD}${YELLOW}Invalid database name ! Use only letters, numbers, underscores or dashes can't have spaces${RESET}"
             sleep 2
             continue
         fi

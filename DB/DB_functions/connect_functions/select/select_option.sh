@@ -13,7 +13,7 @@ function select_with_option()
             ((ii++))
         done
 
-        echo -e "${UNDERLINE}${BOLD}${YELLOW}Enter column numbers separated by comma space like '1 2 3' :${RESET}"
+        echo -e "${UNDERLINE}${BOLD}${YELLOW}Enter column numbers separated by space like '1 2 3' :${RESET}"
         read -a selected_nums
 
         valid=true

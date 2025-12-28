@@ -10,7 +10,7 @@ function update_table()
     fi
 
     list_tables
-    echo -e "${YELLOW}${BOLD}Enter the name of the table you want to update : ${RESET}"
+    echo -e "${YELLOW}${BOLD}Enter the name of the table you want to update (WHERE column = value) : ${RESET}"
     read table
     #does table exist
     if [[ ! -d "$DB_Dir/$Curr_DB/$table" ]];then
