@@ -103,7 +103,7 @@ function update_table()
         read new_value
         new_value=$(echo "$new_value" | tr -d '[:space:]')
 
-        if [[ "$col_types[$update_index]" == "int" && ! "$new_value" =~ ^[0-9]+$ ]];then
+        if [[ "${col_types[$update_index]}" == "int" && ! "$new_value" =~ ^[0-9]+$ ]];then
             echo -e "${RED}Type does not match. please enter an integer. ${RESET}" 
             continue
         fi
