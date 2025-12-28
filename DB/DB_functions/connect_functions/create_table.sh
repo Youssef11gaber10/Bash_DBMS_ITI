@@ -56,7 +56,7 @@ function create_table()
                 return 1
             # check duplicate
             elif [[ " ${columns[*]} " == *" $colName "* ]]; then
-                echo "${RED}Column '$colName' already exists. Choose another name.${RESET}"
+                echo -e "${RED}Column '$colName' already exists. Choose another name.${RESET}"
                 sleep 2
                 return 1
             else
