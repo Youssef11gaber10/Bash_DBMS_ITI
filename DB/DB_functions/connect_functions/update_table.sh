@@ -33,7 +33,7 @@ function update_table()
     pk_index=-1
 
     index=0
-    while IFS='|' read -r cname coltype ckey; do
+    while IFS=':' read -r cname coltype ckey; do
         col_names+=("$cname")
         col_types+=("$coltype")
         if [[ "$ckey" == "PK" ]];then
