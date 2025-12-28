@@ -6,7 +6,7 @@
 source ./DB/DB_functions/connect_functions/list_tables.sh
 function drop_table()
 {
-    # list_tables
+    list_tables
     while true; do
         echo -e "${YELLOW}${UNDERLINE}${BOLD}Enter the name of the table to drop:  ${RED}${UNDERLINE}${BOLD}(-1<---)${RESET}"
         read table_name    

@@ -5,6 +5,7 @@ source ./DB/DB_functions/connect_functions/list_tables.sh
 source ./DB/DB_functions/connect_functions/drop_table.sh
 source ./DB/DB_functions/connect_functions/select_table.sh
 source ./DB/DB_functions/connect_functions/delete_table.sh
+source ./DB/DB_functions/connect_functions/delete_all_data.sh
 source ./DB/DB_functions/connect_functions/update_table.sh
 source ./DB/DB_functions/connect_functions/insert_into_table.sh
 source ./DB/DB_functions/connect_functions/drop_table.sh
