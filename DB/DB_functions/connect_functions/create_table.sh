@@ -25,11 +25,6 @@ function create_table()
         fi
     done
 
-    # create table directory and files~
-    table_dir="$DB_Dir/$Curr_DB/${tname}"
-    mkdir -p "$table_dir"
-    meta_file="$table_dir/${tname}.meta"
-    data_file="$table_dir/${tname}.data"
 
     # columns
     declare -a columns
@@ -56,7 +51,7 @@ function create_table()
                 return 1
             # check duplicate
             elif [[ " ${columns[*]} " == *" $colName "* ]]; then
-                echo "${RED}Column '$colName' already exists. Choose another name.${RESET}"
+                echo -e "${RED}Column '$colName' already exists. Choose another name.${RESET}"
                 sleep 2
                 return 1
             else
@@ -107,6 +102,12 @@ function create_table()
             echo -e "${RED}{$pk} doesn't exisit! ${RESET}"
         fi
     done
+
+    # create table directory and files~
+    table_dir="$DB_Dir/$Curr_DB/${tname}"
+    mkdir -p "$table_dir"
+    meta_file="$table_dir/${tname}.meta"
+    data_file="$table_dir/${tname}.data"
 
 
     #write the schema to file
