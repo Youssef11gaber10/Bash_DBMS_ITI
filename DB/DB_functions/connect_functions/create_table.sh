@@ -49,8 +49,14 @@ function create_table()
     for (( i=0; i<cols; i++));do
         while true; do
             read -p "Enter the column name " colName
+            # check column
             if [[ ! $colName =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]];then
                 echo -e "${RED}Invalid column name${RESET}"
+                sleep 2
+                return 1
+            # check duplicate
+            elif [[ " ${columns[*]} " == *" $colName "* ]]; then
+                echo "${RED}Column '$colName' already exists. Choose another name.${RESET}"
                 sleep 2
                 return 1
             else
