@@ -25,8 +25,8 @@ do
     echo -e "6) Delete Specific Data from Table"
     echo -e "7) Delete all Data from Table"
     echo -e "${GREEN}${BOLD}${UNDERLINE}DQL Operations:${RESET}"
-    echo -e "8) Select all Data from Table"
-    echo -e "9) Select specific Data from Table"
+    echo -e "8) Select Data from Table"
+    # echo -e "9) Select specific Data from Table"
     echo -e "0) Back to Main Menu"
 
 
@@ -42,7 +42,7 @@ do
         6) delete_table ;;
         7) delete_all_data ;;
         8) select_table ;;
-        9) select_table ;;
+        # 9) select_table ;;
         0) break ;;
         *) echo -e "${RED}Invalid option. Please try again.${RESET}" ;;
     esac

@@ -7,7 +7,7 @@
 #then finally append the new record to the table file.
 function insert_into_table()    
 {
-    #list_tables #to show available tables
+    list_tables #to show available tables
     # get table name
     while true 
     do
@@ -137,7 +137,7 @@ function insert_into_table()
                     fi
 
                     # # check if colv_al exist before in its field
-                    if [[ ! -z $(cut -d: -f$c $data_file | grep -x "$col_value") ]] #it wasn't empty has this value before error
+                    if [[ ! -z $(awk -F'<\\|>' -v col="$c" '{ print $col }' "$data_file" | grep -Fx "$col_value") ]] #it wasn't empty has this value before error
                         then
                         echo -e "${RED}Duplicate primary key value!${RESET}"
                         sleep 2
@@ -149,13 +149,13 @@ function insert_into_table()
                 break #take another column for this row 
 
             done
-                #add this value to the row will insert
-                row_to_insert+=":$col_value"
+                #add this value to the row will insert#change the delimiter from : to <|>
+                row_to_insert+="<|>$col_value"
             
         done
 
         #if you get here its time to insert your row to file data
-        echo "${row_to_insert:1}" >> $data_file
+        echo "${row_to_insert:3}" >> $data_file
         echo -e "${GREEN}✔ row $i inserted successfully in table:'$table_name'.${RESET}"
         sleep 2        
     done
