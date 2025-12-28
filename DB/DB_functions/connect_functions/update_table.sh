@@ -122,15 +122,17 @@ function update_table()
     > "$tmp_file"
     updated=false
 
-    while IFS='|' read -r -a row; do
+    temp_delimiter=$'\037'
+    while IFS="$temp_delimiter" read -r -a row; do
         if [[ "${row[$where_index]}" == "$where_val" ]]; then
             for index in "${!updates[@]}"; do
                 row[$index]="${updates[$index]}"
             done
             updated=true
         fi
-        printf "%s\n" "$(IFS='|'; echo "${row[*]}")" >> "$tmp_file"
-    done < "$data_file"
+
+        ( IFS=$''; echo "${row[*]/%/<|>}" | sed 's/<|>$//' ) >> "$tmp_file"
+    done < <(sed "s/<|>/$temp_delimiter/g" "$data_file")
 
     if [[ "$updated" == false ]]; then
         echo -e "${RED}No matching records${RESET}"

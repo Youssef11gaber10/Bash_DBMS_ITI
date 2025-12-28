@@ -72,7 +72,8 @@ function delete_table()
     > "$tmp_file"
     deleted=false
 
-    while IFS='|' read -r -a row; do
+    temp_delimiter=$'\037'
+    while IFS="$temp_delimiter" read -r -a row; do
     
         if [[ "${#row[@]}" -ne "${#col_names[@]}" ]];then
             continue
@@ -83,9 +84,9 @@ function delete_table()
             continue
         fi
 
-       (IFS='|'; echo "${row[*]}") >> "$tmp_file"
+       ( IFS=$''; echo "${row[*]/%/<|>}" | sed 's/<|>$//' ) >> "$tmp_file"
 
-    done < "$data_file"
+    done < <(sed "s/<|>/$temp_delimiter/g" "$data_file")
 
     if [[ "$deleted" == false ]]; then
         echo -e "${RED}No matching records${RESET}"
